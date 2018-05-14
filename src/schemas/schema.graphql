@@ -1,0 +1,12 @@
+# import Auction from '../generated/prisma.graphql'
+
+type Query {
+  auctions:[Auction!]!
+  auction(id: ID!):Auction!
+  auctionsByUser(userId: ID!):[Auction!]!
+}
+
+type Mutation {
+  createAuction(name: String!): Auction!
+  deleteAuction(id: ID!): Auction!
+}

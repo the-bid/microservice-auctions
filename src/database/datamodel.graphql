@@ -1,0 +1,7 @@
+type Auction {
+  id: ID! @unique
+  createdAt: DateTime!
+  name: String! @unique
+  ownerId: String!
+  playerIds: [ID!]!
+}
