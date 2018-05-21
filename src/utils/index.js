@@ -8,8 +8,8 @@ function getUserId(request) {
 
 function parseBearerToken(request) {
   const token = get(request, 'headers.authorization')
-  if (!token) {
-    throw new Error('Authorization header required')
+  if (!token || !token.includes('Bearer')) {
+    throw new Error('Authorization header Bearer token required')
   }
   return token.replace('Bearer ', '')
 }

@@ -7,9 +7,6 @@ module.exports = {
 
 function createAuction(root, { name }, context, info) {
   const userId = getUserId(context.request)
-  if (!userId) {
-    throw new Error('JWT missing "sub"')
-  }
   return context.db.mutation.createAuction(
     {
       data: {
@@ -22,10 +19,14 @@ function createAuction(root, { name }, context, info) {
 }
 
 function deleteAuction(root, { id }, context, info) {
+  const userId = getUserId(context.request)
   return context.db.mutation.deleteAuction(
     {
       where: {
-        id
+        AND: {
+          id,
+          ownerId: userId
+        }
       }
     },
     info

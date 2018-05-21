@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --fix --ignore-path .gitignore --ignore-pattern '!.eslintrc.js'",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run lint && npm run unit",
+    "unit":"jest",
+    "coverage":"jest --coverage",
     "start": "nodemon -r dotenv/config src/index.js",
     "start:dev": "npm-run-all -pl start playground ",
     "start:prod": "node src/index.js",
@@ -23,12 +25,15 @@
     "prisma-binding": "^1.5.17"
   },
   "devDependencies": {
+    "casual": "^1.5.19",
     "dotenv": "^5.0.1",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-jest": "^21.15.1",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-security": "^1.4.0",
+    "graphql": "^0.13.2",
+    "graphql-import": "^0.5.2",
     "jest": "^22.4.3",
     "nodemon": "^1.17.4",
     "npm-run-all": "^4.1.2",
@@ -38,5 +43,11 @@
     "semi": false,
     "printWidth": 120,
     "singleQuote": true
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/test",
+      "<rootDir>/config"
+    ]
   }
 }
