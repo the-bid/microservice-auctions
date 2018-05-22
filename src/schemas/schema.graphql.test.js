@@ -2,7 +2,7 @@ const { makeExecutableSchema, addMockFunctionsToSchema } = require('graphql-tool
 const { graphql } = require('graphql')
 const { importSchema } = require('graphql-import')
 const { moment, uuid, title } = require('casual')
-const { auctionObjectTemplate } = require('../../test/utils')
+const { auctionObjectTemplate } = require('../../test/object-templates')
 
 describe('Schema', () => {
   let schema = null

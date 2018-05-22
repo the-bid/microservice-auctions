@@ -1,16 +1,17 @@
-const { integer, uuid } = require('casual')
+const { uuid } = require('casual')
 const { auctions, auction, auctionsByUser } = require('./Query')
 const MockAuction = require('../../test/mock-data/Auction')
-const { auctionObjectTemplate } = require('../../test/utils')
+const { auctionObjectTemplate } = require('../../test/object-templates')
+const { expectArrayOfMatchingObjects } = require('../../test/expect-extensions')
+const { getAuctionsData } = require('../../test/mock-data/factories')
 
 describe('Query', () => {
   const context = {}
   describe('auctions', () => {
     beforeEach(() => {
-      const auctionsData = Array.from(new Array(integer(1, 100)), () => new MockAuction())
       context.db = {
         query: {
-          auctions: jest.fn(() => auctionsData)
+          auctions: jest.fn(getAuctionsData)
         }
       }
     })
@@ -20,9 +21,7 @@ describe('Query', () => {
     test('returns an array of Auctions', () => {
       const result = auctions({}, {}, context)
       expect(result).toEqual(expect.any(Array))
-      result.forEach(auction => {
-        expect(auction).toMatchObject(auctionObjectTemplate)
-      })
+      expectArrayOfMatchingObjects(result, auctionObjectTemplate)
     })
   })
   describe('auction', () => {
@@ -48,10 +47,9 @@ describe('Query', () => {
   })
   describe('auctionsByUser', () => {
     beforeEach(() => {
-      const auctionsData = Array.from(new Array(integer(1, 10)), () => new MockAuction())
       context.db = {
         query: {
-          auctions: jest.fn(() => auctionsData)
+          auctions: jest.fn(getAuctionsData)
         }
       }
     })
@@ -66,9 +64,7 @@ describe('Query', () => {
     test('returns a list of auctions', () => {
       const result = auctionsByUser({}, { userId: uuid }, context)
       expect(result).toEqual(expect.any(Array))
-      result.forEach(auction => {
-        expect(auction).toMatchObject(auctionObjectTemplate)
-      })
+      expectArrayOfMatchingObjects(result, auctionObjectTemplate)
     })
   })
 })
