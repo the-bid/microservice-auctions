@@ -105,5 +105,16 @@ describe('Schema', () => {
         expect(data.deleteAuction).toMatchObject(auctionObjectTemplate)
       })
     })
+    test('returns a GraphQLError for unknown mutation', async () => {
+      expect.assertions(2)
+      const query = `mutation unknown{
+        unknown{
+          id
+        }
+      }`
+      const result = await graphql(schema, query)
+      expect(result).toHaveProperty('errors')
+      expect(result.errors[0]).toHaveProperty('message', 'Cannot query field "unknown" on type "Mutation".')
+    })
   })
 })
