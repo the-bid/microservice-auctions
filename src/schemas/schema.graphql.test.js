@@ -37,21 +37,43 @@ describe('Schema', () => {
           expect(auction).toMatchObject(auctionObjectTemplate)
         })
       })
-      describe('auction', () => {
-        test('returns an auction', async () => {
-          expect.assertions(1)
-          const query = `query auction{
-            auction(id:"${uuid}"){
-              id
-              createdAt
-              name
-              ownerId
-            }
-          }`
-          const { data } = await graphql(schema, query)
-          expect(data.auction).toMatchObject(auctionObjectTemplate)
-        })
+      test('returns a GraphQLError for unknown query property', async () => {
+        expect.assertions(2)
+        const query = `query auctions{
+          auctions{
+            unknown
+          }
+        }`
+        const result = await graphql(schema, query)
+        expect(result).toHaveProperty('errors')
+        expect(result.errors[0]).toHaveProperty('message', 'Cannot query field "unknown" on type "Auction".')
       })
+    })
+    describe('auction', () => {
+      test('returns an auction', async () => {
+        expect.assertions(1)
+        const query = `query auction{
+          auction(id:"${uuid}"){
+            id
+            createdAt
+            name
+            ownerId
+          }
+        }`
+        const { data } = await graphql(schema, query)
+        expect(data.auction).toMatchObject(auctionObjectTemplate)
+      })
+    })
+    test('returns a GraphQLError for unknown query', async () => {
+      expect.assertions(2)
+      const query = `query unknown{
+        unknown{
+          id
+        }
+      }`
+      const result = await graphql(schema, query)
+      expect(result).toHaveProperty('errors')
+      expect(result.errors[0]).toHaveProperty('message', 'Cannot query field "unknown" on type "Query".')
     })
   })
   describe('Mutation', () => {
