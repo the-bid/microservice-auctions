@@ -1,4 +1,4 @@
-const { uuid } = require('casual')
+const casual = require('casual')
 const { auctions, auction, auctionsByUser } = require('./Query')
 const MockAuction = require('../../test/mock-data/Auction')
 const { auctionObjectTemplate } = require('../../test/object-templates')
@@ -18,8 +18,8 @@ describe('Query', () => {
     afterEach(() => {
       delete context.db
     })
-    test('returns an array of Auctions', () => {
-      const result = auctions({}, {}, context)
+    test('returns an array of Auctions', async () => {
+      const result = await auctions({}, {}, context)
       expect(result).toEqual(expect.any(Array))
       expectArrayOfMatchingObjects(result, auctionObjectTemplate)
     })
@@ -35,13 +35,13 @@ describe('Query', () => {
     afterEach(() => {
       delete context.db
     })
-    test('db.query.auction gets called with where clause', () => {
-      const id = uuid
-      auction({}, { id }, context, {})
+    test('db.query.auction gets called with where clause', async () => {
+      const id = casual.uuid
+      await auction({}, { id }, context, {})
       expect(context.db.query.auction).toBeCalledWith({ where: { id } }, {})
     })
-    test('returns an auction', () => {
-      const result = auction({}, { id: uuid }, context)
+    test('returns an auction', async () => {
+      const result = await auction({}, { id: casual.uuid }, context)
       expect(result).toMatchObject(auctionObjectTemplate)
     })
   })
@@ -56,13 +56,13 @@ describe('Query', () => {
     afterEach(() => {
       delete context.db
     })
-    test('db.query.auctions gets called with where clause', () => {
-      const id = uuid
-      auctionsByUser({}, { userId: id }, context, {})
+    test('db.query.auctions gets called with where clause', async () => {
+      const id = casual.uuid
+      await auctionsByUser({}, { userId: id }, context, {})
       expect(context.db.query.auctions).toBeCalledWith({ where: { OR: [{ ownerId: id }] } }, {})
     })
-    test('returns a list of auctions', () => {
-      const result = auctionsByUser({}, { userId: uuid }, context)
+    test('returns a list of auctions', async () => {
+      const result = await auctionsByUser({}, { userId: casual.uuid }, context)
       expect(result).toEqual(expect.any(Array))
       expectArrayOfMatchingObjects(result, auctionObjectTemplate)
     })

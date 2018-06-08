@@ -17,7 +17,7 @@
     "playground": "graphql playground --port 3002"
   },
   "author": "bialesdaniel@gmail.com",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "graphql-yoga": "^1.9.2",
     "jsonwebtoken": "^8.2.1",

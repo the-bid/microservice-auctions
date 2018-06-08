@@ -16,7 +16,7 @@ describe('Utils', () => {
     })
     test('returns the sub of a jwt', () => {
       const result = getUserId(request)
-      expect(result).toEqual(expect.stringMatching(/^[^Bearer].*$/))
+      expect(result).toEqual(expect.stringMatching(/^(?!Bearer).*$/))
     })
     test('throws error if the auth header is not a bearer token', () => {
       request.headers.authorization = `Basic ${uuid}`

@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken')
-const { uuid, title } = require('casual')
+const casual = require('casual')
 const { createAuction, deleteAuction } = require('./Mutation')
 
 describe('Mutation', () => {
   const context = {}
   let userId = null
   beforeEach(() => {
-    userId = uuid
+    userId = casual.uuid
     context.request = {
       headers: {
         authorization: `Bearer ${jwt.sign({ sub: userId }, 'secret')}`
@@ -28,9 +28,9 @@ describe('Mutation', () => {
     afterEach(() => {
       delete context.db
     })
-    test('db.mutation.createAuction called with name and ownerId', () => {
-      const auctionName = title
-      createAuction({}, { name: auctionName }, context, {})
+    test('db.mutation.createAuction called with name and ownerId', async () => {
+      const auctionName = casual.title
+      await createAuction({}, { name: auctionName }, context, {})
       expect(context.db.mutation.createAuction).toBeCalledWith({ data: { name: auctionName, ownerId: userId } }, {})
     })
   })
@@ -45,9 +45,9 @@ describe('Mutation', () => {
     afterEach(() => {
       delete context.db
     })
-    test('db.mutation.deleteAuction called with id and ownerId', () => {
-      const id = uuid
-      deleteAuction({}, { id }, context, {})
+    test('db.mutation.deleteAuction called with id and ownerId', async () => {
+      const id = casual.uuid
+      await deleteAuction({}, { id }, context, {})
       expect(context.db.mutation.deleteAuction).toBeCalledWith({ where: { AND: { id, ownerId: userId } } }, {})
     })
   })

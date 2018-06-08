@@ -5,4 +5,10 @@ const auctionObjectTemplate = {
   ownerId: expect.any(String)
 }
 
-module.exports = { auctionObjectTemplate }
+function missingFieldErrorMessage({ method, field, type }) {
+  return {
+    message: `Field "${method}" argument "${field}" of type "${type}!" is required but not provided.`
+  }
+}
+
+module.exports = { auctionObjectTemplate, missingFieldErrorMessage }
