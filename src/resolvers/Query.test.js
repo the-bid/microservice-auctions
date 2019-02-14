@@ -9,14 +9,12 @@ describe('Query', () => {
   const context = {}
   describe('auctions', () => {
     beforeEach(() => {
-      context.db = {
-        query: {
-          auctions: jest.fn(getAuctionsData)
-        }
+      context.prisma = {
+        auctions: jest.fn(getAuctionsData)
       }
     })
     afterEach(() => {
-      delete context.db
+      delete context.prisma
     })
     test('returns an array of Auctions', async () => {
       const result = await auctions({}, {}, context)
@@ -26,19 +24,17 @@ describe('Query', () => {
   })
   describe('auction', () => {
     beforeEach(() => {
-      context.db = {
-        query: {
-          auction: jest.fn(() => new MockAuction())
-        }
+      context.prisma = {
+        auction: jest.fn(() => new MockAuction())
       }
     })
     afterEach(() => {
       delete context.db
     })
-    test('db.query.auction gets called with where clause', async () => {
+    test('prisma.auction gets called with where clause', async () => {
       const id = casual.uuid
       await auction({}, { id }, context, {})
-      expect(context.db.query.auction).toBeCalledWith({ where: { id } }, {})
+      expect(context.prisma.auction).toBeCalledWith({ id })
     })
     test('returns an auction', async () => {
       const result = await auction({}, { id: casual.uuid }, context)
@@ -47,19 +43,17 @@ describe('Query', () => {
   })
   describe('auctionsByUser', () => {
     beforeEach(() => {
-      context.db = {
-        query: {
-          auctions: jest.fn(getAuctionsData)
-        }
+      context.prisma = {
+        auctions: jest.fn(getAuctionsData)
       }
     })
     afterEach(() => {
-      delete context.db
+      delete context.prisma
     })
-    test('db.query.auctions gets called with where clause', async () => {
+    test('prisma.auctions gets called with where clause', async () => {
       const id = casual.uuid
       await auctionsByUser({}, { userId: id }, context, {})
-      expect(context.db.query.auctions).toBeCalledWith({ where: { OR: [{ ownerId: id }] } }, {})
+      expect(context.prisma.auctions).toBeCalledWith({ where: { OR: [{ ownerId: id }] } })
     })
     test('returns a list of auctions', async () => {
       const result = await auctionsByUser({}, { userId: casual.uuid }, context)

@@ -5,30 +5,23 @@ module.exports = {
   deleteAuction
 }
 
-function createAuction(root, { name }, context, info) {
+function createAuction(root, { name }, context) {
   const userId = getUserId(context.request)
-  return context.db.mutation.createAuction(
-    {
-      data: {
-        name,
-        ownerId: userId
-      }
-    },
-    info
-  )
+  return context.prisma.createAuction({
+    name,
+    ownerId: userId
+  })
 }
 
-function deleteAuction(root, { id }, context, info) {
+async function deleteAuction(root, { id }, context) {
   const userId = getUserId(context.request)
-  return context.db.mutation.deleteAuction(
-    {
-      where: {
-        AND: {
-          id,
-          ownerId: userId
-        }
-      }
-    },
-    info
-  )
+  const isOwner = await context.prisma.$exists.auction({ AND: [{ id }, { ownerId: userId }] })
+  if (isOwner) {
+    return context.prisma.deleteAuction({
+      id
+    })
+  } else {
+    //TODO: what if it does not exist
+    throw new Error('User cannot delete an auction they do not own.')
+  }
 }

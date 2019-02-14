@@ -1,0 +1,12 @@
+datamodel: src/database/datamodel.prisma
+endpoint: http://localhost:4466/the-bid-auctions/local
+secret: ${env:PRISMA_SECRET}
+generate:
+  - generator: javascript-client
+    output: ./src/generated
+  - generator: graphql-schema
+    output: ./src/generated
+hooks:
+  post-deploy:
+    - prisma generate
+    - echo "Deployment finished"

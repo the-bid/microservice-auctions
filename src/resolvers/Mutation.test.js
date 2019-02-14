@@ -19,36 +19,43 @@ describe('Mutation', () => {
   })
   describe('createAuction', () => {
     beforeEach(() => {
-      context.db = {
-        mutation: {
-          createAuction: jest.fn()
-        }
+      context.prisma = {
+        createAuction: jest.fn()
       }
     })
     afterEach(() => {
-      delete context.db
+      delete context.prisma
     })
-    test('db.mutation.createAuction called with name and ownerId', async () => {
+    test('prisma.createAuction called with name and ownerId', async () => {
       const auctionName = casual.title
-      await createAuction({}, { name: auctionName }, context, {})
-      expect(context.db.mutation.createAuction).toBeCalledWith({ data: { name: auctionName, ownerId: userId } }, {})
+      await createAuction({}, { name: auctionName }, context)
+      expect(context.prisma.createAuction).toBeCalledWith({ name: auctionName, ownerId: userId })
     })
   })
   describe('deleteAuction', () => {
+    let auctionOwner
     beforeEach(() => {
-      context.db = {
-        mutation: {
-          deleteAuction: jest.fn()
+      context.prisma = {
+        deleteAuction: jest.fn(),
+        $exists: {
+          auction: jest.fn(() => auctionOwner === userId)
         }
       }
     })
     afterEach(() => {
-      delete context.db
+      auctionOwner = null
+      delete context.prisma
     })
-    test('db.mutation.deleteAuction called with id and ownerId', async () => {
+    test('prisma.deleteAuction called with id if userId is owner of the auction', async () => {
+      auctionOwner = userId
       const id = casual.uuid
-      await deleteAuction({}, { id }, context, {})
-      expect(context.db.mutation.deleteAuction).toBeCalledWith({ where: { AND: { id, ownerId: userId } } }, {})
+      await deleteAuction({}, { id }, context)
+      expect(context.prisma.deleteAuction).toBeCalledWith({ id })
+    })
+    test('deleteAuction throws error if userId is not owner of the auction', async () => {
+      auctionOwner = casual.uuid
+      const id = casual.uuid
+      await expect(deleteAuction({}, { id }, context)).rejects.toThrow('User cannot delete an auction they do not own.')
     })
   })
 })
