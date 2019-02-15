@@ -1,6 +1,6 @@
 datamodel: src/database/datamodel.prisma
 endpoint: http://localhost:4466/the-bid-auctions/local
-secret: ${env:PRISMA_SECRET}
+secret: ${env:PRISMA_MANAGEMENT_API_SECRET}
 generate:
   - generator: javascript-client
     output: ./src/generated

@@ -12,19 +12,19 @@ services:
         databases:
           default:
             connector: postgres
-            managementApiSecret: ${PRISMA_SECRET}
+            managementApiSecret: ${PRISMA_MANAGEMENT_API_SECRET}
             active: true
             host: postgres-db
             port: 5432
-            user: prisma
-            password: prisma
+            user: ${POSTGRES_USER}
+            password: ${POSTGRES_PASSWORD}
             migrations: true
   postgres-db:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres:/var/lib/postgresql/data
 volumes:
