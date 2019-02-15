@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const casual = require('casual')
 const { createAuction, deleteAuction } = require('./Mutation')
+const MockAuction = require('../../test/mock-data/Auction')
 
 describe('Mutation', () => {
   const context = {}
@@ -29,32 +30,34 @@ describe('Mutation', () => {
     test('prisma.createAuction called with name and ownerId', async () => {
       const auctionName = casual.title
       await createAuction({}, { name: auctionName }, context)
-      expect(context.prisma.createAuction).toBeCalledWith({ name: auctionName, ownerId: userId })
+      expect(context.prisma.createAuction).toHaveBeenCalledWith({ name: auctionName, ownerId: userId })
     })
   })
   describe('deleteAuction', () => {
-    let auctionOwner
+    let auction
     beforeEach(() => {
+      auction = new MockAuction({ ownerId: userId })
       context.prisma = {
         deleteAuction: jest.fn(),
-        $exists: {
-          auction: jest.fn(() => auctionOwner === userId)
-        }
+        auction: jest.fn(({ id }) => (auction.id === id ? auction : null))
       }
     })
     afterEach(() => {
-      auctionOwner = null
+      auction = null
       delete context.prisma
     })
     test('prisma.deleteAuction called with id if userId is owner of the auction', async () => {
-      auctionOwner = userId
-      const id = casual.uuid
+      const id = auction.id
       await deleteAuction({}, { id }, context)
-      expect(context.prisma.deleteAuction).toBeCalledWith({ id })
+      expect(context.prisma.deleteAuction).toHaveBeenCalledWith({ id })
+    })
+    test('deleteAuction throws error if auction does not exist', async () => {
+      const id = casual.uuid
+      await expect(deleteAuction({}, { id }, context)).rejects.toThrow('Auction does not exist')
     })
     test('deleteAuction throws error if userId is not owner of the auction', async () => {
-      auctionOwner = casual.uuid
-      const id = casual.uuid
+      auction.ownerId = casual.uuid
+      const id = auction.id
       await expect(deleteAuction({}, { id }, context)).rejects.toThrow('User cannot delete an auction they do not own.')
     })
   })

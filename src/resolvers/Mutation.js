@@ -15,13 +15,14 @@ function createAuction(root, { name }, context) {
 
 async function deleteAuction(root, { id }, context) {
   const userId = getUserId(context.request)
-  const isOwner = await context.prisma.$exists.auction({ AND: [{ id }, { ownerId: userId }] })
-  if (isOwner) {
-    return context.prisma.deleteAuction({
-      id
-    })
-  } else {
-    //TODO: what if it does not exist
+  const auctionToDelete = await context.prisma.auction({ id })
+  if (!auctionToDelete) {
+    throw new Error('Auction does not exist')
+  }
+  if (userId !== auctionToDelete.ownerId) {
     throw new Error('User cannot delete an auction they do not own.')
   }
+  return context.prisma.deleteAuction({
+    id
+  })
 }

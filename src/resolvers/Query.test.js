@@ -34,7 +34,7 @@ describe('Query', () => {
     test('prisma.auction gets called with where clause', async () => {
       const id = casual.uuid
       await auction({}, { id }, context, {})
-      expect(context.prisma.auction).toBeCalledWith({ id })
+      expect(context.prisma.auction).toHaveBeenCalledWith({ id })
     })
     test('returns an auction', async () => {
       const result = await auction({}, { id: casual.uuid }, context)
@@ -53,7 +53,7 @@ describe('Query', () => {
     test('prisma.auctions gets called with where clause', async () => {
       const id = casual.uuid
       await auctionsByUser({}, { userId: id }, context, {})
-      expect(context.prisma.auctions).toBeCalledWith({ where: { OR: [{ ownerId: id }] } })
+      expect(context.prisma.auctions).toHaveBeenCalledWith({ where: { OR: [{ ownerId: id }] } })
     })
     test('returns a list of auctions', async () => {
       const result = await auctionsByUser({}, { userId: casual.uuid }, context)

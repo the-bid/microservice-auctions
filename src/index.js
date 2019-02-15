@@ -1,6 +1,6 @@
 const { GraphQLServer } = require('graphql-yoga')
 const { prisma } = require('./generated')
-const { PORT } = require('../config/config')
+const { PORT } = require('../config')
 const Query = require('./resolvers/Query')
 const Mutation = require('./resolvers/Mutation')
 

@@ -1,12 +1,12 @@
-const { uuid, moment, title, integer } = require('casual')
+const casual = require('casual')
 
 class MockAuction {
-  constructor() {
-    this.id = uuid
-    this.createdAt = moment.toISOString()
-    this.name = title
-    this.ownerId = uuid
-    this.playerIds = Array.from(new Array(integer(0, 64)), () => uuid)
+  constructor({ id, createdAt, name, ownerId, playerIds } = {}) {
+    this.id = id || casual.uuid
+    this.createdAt = createdAt || casual.moment.toISOString()
+    this.name = name || casual.title
+    this.ownerId = ownerId || casual.uuid
+    this.playerIds = playerIds || Array.from(new Array(casual.integer(0, 64)), () => casual.uuid)
   }
 }
 
