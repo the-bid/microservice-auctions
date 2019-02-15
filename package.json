@@ -23,17 +23,17 @@
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "prisma-binding": "^2.3.2",
-    "prisma-client-lib": "^1.26.5"
+    "prisma-client-lib": "^1.26.6"
   },
   "devDependencies": {
     "casual": "^1.6.0",
     "dotenv": "^5.0.1",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.10.0",
-    "eslint-plugin-jest": "^21.27.2",
+    "eslint-plugin-jest": "^22.0.0",
     "eslint-plugin-prettier": "^2.7.0",
     "eslint-plugin-security": "^1.4.0",
-    "graphql": "^0.13.2",
+    "graphql": "^14.0.0",
     "graphql-import": "^0.5.3",
     "jest": "^24.0.0",
     "nodemon": "^1.18.10",
