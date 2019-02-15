@@ -29,7 +29,7 @@ describe('Query', () => {
       }
     })
     afterEach(() => {
-      delete context.db
+      delete context.prisma
     })
     test('prisma.auction gets called with where clause', async () => {
       const id = casual.uuid
