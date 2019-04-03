@@ -1,8 +1,29 @@
 const { getUserId } = require('../utils')
 
 module.exports = {
+  addPlayer,
   createAuction,
   deleteAuction
+}
+
+async function addPlayer(root, { id, userId }, context) {
+  const auction = await context.prisma.auction({ id })
+  if (!auction) {
+    throw new Error('Auction does not exist')
+  }
+  const { ownerId, playerIds } = auction
+  if (ownerId === userId) {
+    throw new Error('User is already the owner of the auction')
+  }
+  if (playerIds.includes(userId)) {
+    throw new Error('User is already a player in the auction')
+  }
+  return context.prisma.updateAuction({
+    data: {
+      playerIds: [...playerIds, userId]
+    },
+    where: { id }
+  })
 }
 
 function createAuction(root, { name }, context) {

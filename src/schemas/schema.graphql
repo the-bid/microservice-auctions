@@ -4,9 +4,11 @@ type Query {
   auctions:[Auction!]!
   auction(id: ID!):Auction!
   auctionsByUser(userId: ID!):[Auction!]!
+  isMember(id:ID!, userId:ID!):Boolean!
 }
 
 type Mutation {
+  addPlayer(id:ID!,userId:ID!):Auction!
   createAuction(name: String!): Auction!
   deleteAuction(id: ID!): Auction!
 }

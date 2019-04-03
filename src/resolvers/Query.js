@@ -1,7 +1,8 @@
 module.exports = {
   auctions,
   auction,
-  auctionsByUser
+  auctionsByUser,
+  isMember
 }
 
 function auctions(root, args, context) {
@@ -9,7 +10,7 @@ function auctions(root, args, context) {
 }
 
 function auction(root, { id }, context) {
-  return context.prisma.auction({ id: id })
+  return context.prisma.auction({ id })
 }
 
 function auctionsByUser(root, { userId }, context) {
@@ -17,4 +18,13 @@ function auctionsByUser(root, { userId }, context) {
     OR: [{ ownerId: userId }]
   }
   return context.prisma.auctions({ where })
+}
+
+async function isMember(root, { id, userId }, context) {
+  const auction = await context.prisma.auction({ id })
+  if (!auction) {
+    throw new Error('Auction does not exist')
+  }
+  const { ownerId, playerIds } = auction
+  return ownerId === userId || playerIds.includes(userId)
 }

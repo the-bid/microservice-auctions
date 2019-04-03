@@ -2,7 +2,8 @@ const auctionObjectTemplate = {
   id: expect.any(String),
   createdAt: expect.any(String),
   name: expect.any(String),
-  ownerId: expect.any(String)
+  ownerId: expect.any(String),
+  playerIds: expect.any(Array)
 }
 
 function missingFieldErrorMessage({ method, field, type }) {
