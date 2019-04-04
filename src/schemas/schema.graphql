@@ -4,7 +4,7 @@ type Query {
   auctions:[Auction!]!
   auction(id: ID!):Auction!
   auctionsByUser(userId: ID!):[Auction!]!
-  isMember(id:ID!, userId:ID!):Boolean!
+  isMember(id:ID!):Boolean!
 }
 
 type Mutation {

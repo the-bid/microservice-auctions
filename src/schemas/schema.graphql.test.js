@@ -74,28 +74,15 @@ describe('Schema', () => {
       test('returns a boolean', async () => {
         expect.assertions(1)
         const query = `query isMember{
-          isMember(id:"${casual.uuid}",userId:"${casual.uuid}")
+          isMember(id:"${casual.uuid}")
         }`
         const { data } = await graphql(schema, query)
         expect(data.isMember).toEqual(expect.any(Boolean))
       })
-      test('returns a GraphQLError for missing userId field', async () => {
-        expect.assertions(1)
-        const query = `query isMember{
-          isMember(id:"${casual.uuid}")
-        }`
-        const result = await graphql(schema, query)
-        expect(result).toHaveProperty(
-          'errors',
-          expect.arrayContaining([
-            expect.objectContaining(missingFieldErrorMessage({ method: 'isMember', field: 'userId', type: 'ID' }))
-          ])
-        )
-      })
       test('returns a GraphQLError for missing id field', async () => {
         expect.assertions(1)
         const query = `query isMember{
-          isMember(userId:"${casual.uuid}")
+          isMember
         }`
         const result = await graphql(schema, query)
         expect(result).toHaveProperty(

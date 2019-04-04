@@ -1,3 +1,5 @@
+const { getUserId } = require('../utils')
+
 module.exports = {
   auctions,
   auction,
@@ -20,7 +22,8 @@ function auctionsByUser(root, { userId }, context) {
   return context.prisma.auctions({ where })
 }
 
-async function isMember(root, { id, userId }, context) {
+async function isMember(root, { id }, context) {
+  const userId = getUserId(context.request)
   const auction = await context.prisma.auction({ id })
   if (!auction) {
     throw new Error('Auction does not exist')
