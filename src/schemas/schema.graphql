@@ -8,7 +8,8 @@ type Query {
 }
 
 type Mutation {
-  addPlayer(id:ID!,userId:ID!):Auction!
+  addPlayer(id:ID!,userId:ID):Auction!
+  removePlayer(id:ID!,userId:ID):Auction!
   createAuction(name: String!): Auction!
   deleteAuction(id: ID!): Auction!
 }

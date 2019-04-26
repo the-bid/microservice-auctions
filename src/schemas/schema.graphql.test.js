@@ -27,6 +27,7 @@ describe('Schema', () => {
           auctions{
             id
             createdAt
+            updatedAt
             name
             ownerId
             playerIds
@@ -46,6 +47,7 @@ describe('Schema', () => {
           auction(id:"${casual.uuid}"){
             id
             createdAt
+            updatedAt
             name
             ownerId
             playerIds
@@ -54,7 +56,7 @@ describe('Schema', () => {
         const { data } = await graphql(schema, query)
         expect(data.auction).toMatchObject(auctionObjectTemplate)
       })
-      test('returns a GraphQLError for missing name field', async () => {
+      test('returns a GraphQLError for missing id field', async () => {
         expect.assertions(1)
         const query = `query auction{
           auction{
@@ -102,6 +104,22 @@ describe('Schema', () => {
           addPlayer(id:"${casual.uuid}",userId:"${casual.uuid}"){
             id
             createdAt
+            updatedAt
+            name
+            ownerId
+            playerIds
+          }
+        }`
+        const { data } = await graphql(schema, mutation)
+        expect(data.addPlayer).toMatchObject(auctionObjectTemplate)
+      })
+      test('returns an auction if userId is not provided', async () => {
+        expect.assertions(1)
+        const mutation = `mutation addPlayer{
+          addPlayer(id:"${casual.uuid}"){
+            id
+            createdAt
+            updatedAt
             name
             ownerId
             playerIds
@@ -125,10 +143,42 @@ describe('Schema', () => {
           ])
         )
       })
-      test('returns a GraphQLError for missing userId field', async () => {
+    })
+    describe('removePlayer', () => {
+      test('returns an auction', async () => {
         expect.assertions(1)
-        const mutation = `mutation addPlayer{
-          addPlayer(id:"${casual.uuid}"){
+        const mutation = `mutation removePlayer{
+          removePlayer(id:"${casual.uuid}",userId:"${casual.uuid}"){
+            id
+            createdAt
+            updatedAt
+            name
+            ownerId
+            playerIds
+          }
+        }`
+        const { data } = await graphql(schema, mutation)
+        expect(data.removePlayer).toMatchObject(auctionObjectTemplate)
+      })
+      test('returns an auction if userId is not provided', async () => {
+        expect.assertions(1)
+        const mutation = `mutation removePlayer{
+          removePlayer(id:"${casual.uuid}"){
+            id
+            createdAt
+            updatedAt
+            name
+            ownerId
+            playerIds
+          }
+        }`
+        const { data } = await graphql(schema, mutation)
+        expect(data.removePlayer).toMatchObject(auctionObjectTemplate)
+      })
+      test('returns a GraphQLError for missing id field', async () => {
+        expect.assertions(1)
+        const mutation = `mutation removePlayer{
+          removePlayer(userId:"${casual.uuid}"){
             id
           }
         }`
@@ -136,7 +186,7 @@ describe('Schema', () => {
         expect(result).toHaveProperty(
           'errors',
           expect.arrayContaining([
-            expect.objectContaining(missingFieldErrorMessage({ method: 'addPlayer', field: 'userId', type: 'ID' }))
+            expect.objectContaining(missingFieldErrorMessage({ method: 'removePlayer', field: 'id', type: 'ID' }))
           ])
         )
       })
@@ -148,6 +198,7 @@ describe('Schema', () => {
           createAuction(name:"${casual.title}"){
             id
             createdAt
+            updatedAt
             name
             ownerId
             playerIds
@@ -180,6 +231,7 @@ describe('Schema', () => {
           deleteAuction(id:"${casual.uuid}"){
             id
             createdAt
+            updatedAt
             name
             ownerId
             playerIds

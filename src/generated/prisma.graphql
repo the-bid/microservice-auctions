@@ -5,9 +5,10 @@ type AggregateAuction {
 type Auction {
   id: ID!
   createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   ownerId: String!
-  playerIds: [ID!]!
+  playerIds: [String!]!
 }
 
 type AuctionConnection {
@@ -17,13 +18,14 @@ type AuctionConnection {
 }
 
 input AuctionCreateInput {
+  id: ID
   name: String!
   ownerId: String!
   playerIds: AuctionCreateplayerIdsInput
 }
 
 input AuctionCreateplayerIdsInput {
-  set: [ID!]
+  set: [String!]
 }
 
 type AuctionEdge {
@@ -36,20 +38,21 @@ enum AuctionOrderByInput {
   id_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   name_ASC
   name_DESC
   ownerId_ASC
   ownerId_DESC
-  updatedAt_ASC
-  updatedAt_DESC
 }
 
 type AuctionPreviousValues {
   id: ID!
   createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   ownerId: String!
-  playerIds: [ID!]!
+  playerIds: [String!]!
 }
 
 type AuctionSubscriptionPayload {
@@ -83,7 +86,7 @@ input AuctionUpdateManyMutationInput {
 }
 
 input AuctionUpdateplayerIdsInput {
-  set: [ID!]
+  set: [String!]
 }
 
 input AuctionWhereInput {
@@ -109,6 +112,14 @@ input AuctionWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   name: String
   name_not: String
   name_in: [String!]

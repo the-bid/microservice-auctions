@@ -1,7 +1,8 @@
 type Auction {
-  id: ID! @unique
-  createdAt: DateTime!
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
   name: String! @unique
   ownerId: String!
-  playerIds: [ID!]!
+  playerIds: [String!]! @scalarList(strategy:RELATION)
 }
