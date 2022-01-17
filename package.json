@@ -12,15 +12,18 @@
     "start:prod": "node src/index.js",
     "deploy:db": "prisma deploy -e .env",
     "start:db": "docker-compose -f deployment/docker-compose.yml up -d",
-    "stop:db": "docker-compose -f deployment/docker-compose.yml stop"
+    "stop:db": "docker-compose -f deployment/docker-compose.yml stop",
+    "prepare": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "author": "bialesdaniel@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "graphql-yoga": "^1.17.4",
+    "graphql-yoga": "^1.18.1",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.11",
-    "prisma-client-lib": "^1.30.2"
+    "lodash": "^4.17.21",
+    "prisma-client-lib": "^1.30.2",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "casual": "^1.6.0",
@@ -47,5 +50,6 @@
       "<rootDir>/test",
       "<rootDir>/config"
     ]
-  }
+  },
+  "snyk": true
 }
